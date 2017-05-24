@@ -1,9 +1,9 @@
 import IndexPage from './pages/index'
 import Detail from './pages/detail'
-import Count from './components/detail/count.vue'
-import Forecast from './components/detail/forecast.vue'
-import Analysis from './components/detail/analysis.vue'
-import Publish from './components/detail/publish.vue'
+import Count from './pages/detail/count.vue'
+import Forecast from './pages/detail/forecast.vue'
+import Analysis from './pages/detail/analysis.vue'
+import Publish from './pages/detail/publish.vue'
 
 
 export default [{
@@ -13,6 +13,7 @@ export default [{
   {
     path: '/detail',
     component: Detail,
+    redirect: '/detail/count',
     children: [{
         path: 'count',
         component: Count

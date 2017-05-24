@@ -2,7 +2,9 @@
   <div>
     <div class="app-head">
       <div class="app-head-inner">
-        <img src="../assets/logo.png">
+        <router-link :to="{path: '/'}">
+          <img src="../assets/logo.png">
+        </router-link>
         <div class="head-nav">
           <ul class="nav-list">
             <li>{{username}}</li>
@@ -38,7 +40,7 @@
 </template>
 
 <script>
-import Dialog from './diaLog'
+import Dialog from './base/diaLog'
 import LogForm from './logForm'
 import RegForm from './regForm'
 export default {
