@@ -6,6 +6,7 @@ import VueResource from 'vue-resource'
 import routes from './router.config'
 import layout from './components/Layout'
 
+import store from './store'
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
@@ -19,6 +20,7 @@ const router = new VueRouter({
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<layout/>',
   components: { layout }
 })
