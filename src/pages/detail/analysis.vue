@@ -98,11 +98,15 @@
           </tr>
         </table>
         <h3 class="buy-dialog-title">请选择银行</h3>
-        <bank-chooser></bank-chooser>
+        <bank-chooser @on-change="onChangeBanks"></bank-chooser>
         <div>
-          <div class="button buy-dialog-btn">确认购买</div>
+          <div class="button buy-dialog-btn" @click="confirmBuy">确认购买</div>
         </div>
     </my-dialog>
+    <my-dialog :is-show="isShowErrDialog" @on-close="hideErrDialog">
+      支付失败
+    </my-dialog>
+    <check-order :is-show-check-dialog="isShowCheckOrder" :order-id="orderId" @on-close-check-dialog="hideCheckOrder"></check-order>
   </div>
 </template>
 <script>
@@ -112,6 +116,7 @@ import VChooser from '../../components/base/chooser'
 import VMulChooser from '../../components/base/multiplyChooser'
 import Dialog from '../../components/base/diaLog'
 import BankChooser from '../../components/bankChooser'
+import CheckOrder from '../../components/checkOrder'
 
 import _ from 'lodash'
 
@@ -122,7 +127,8 @@ export default {
     VChooser,
     VMulChooser,
     MyDialog: Dialog,
-    BankChooser
+    BankChooser,
+    CheckOrder
   },
   data (){
     return {
@@ -173,7 +179,11 @@ export default {
             value: 2
           }
         ],
-        isShowPayDialog: false
+        isShowPayDialog: false,
+        bankId: 201,
+        isShowCheckOrder: false,
+        isShowErrDialog: false,
+        orderId: null
       }
     },
     methods: {
@@ -196,12 +206,48 @@ export default {
         .then((res) => {
           this.price = res.data.amount
         })
+        .catch((err)=>{
+          console.log(err)
+        })
       },
       showPayDialog(){
         this.isShowPayDialog = true
       },
       hidePayDialog(){
         this.isShowPayDialog = false
+      },
+      onChangeBanks(bankObj){
+        this.bankId = bankObj.id
+      },
+      hideErrDialog(){
+        this.isShowErrDialog = false
+      },
+      hideCheckOrder(){
+        this.isShowCheckOrder = false
+      },
+      confirmBuy(){
+        let buyVersionsArray = _.map(this.versions, (item) => {
+          return item.value
+        })
+        let reqParams = {
+          buyNumber: this.buyNum,
+          buyType: this.buyType.value,
+          period: this.period.value,
+          version: buyVersionsArray.join(','),
+          bankId: this.bankId
+        }
+        this.$http.post('/api/createOrder', reqParams)
+        .then((res) => {
+          this.orderId = res.data.orderId
+          this.isShowCheckOrder = true
+          this.isShowPayDialog = false
+          
+        })
+        .catch((err)=>{
+          console.log(err)
+          this.isShowPayDialog = false
+          this.isShowErrDialog = true
+        })
       }
     },
     mounted () {

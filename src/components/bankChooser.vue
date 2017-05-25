@@ -1,15 +1,12 @@
 <template>
   <div class="chooser-component">
     <ul class="chooser-list">
-      <li>银行1</li>
-      <li>银行2</li>
-      <li>银行3</li>
-      <!--<li
+      <li
       v-for="(item, index) in banks"
       @click="chooseSelection(index)"
       :title="item.label"
-      :class="[item.name, {active: index === nowIndex}]"
-      ></li>-->
+      :class="[item.name, {active: index === nowIndex}]" 
+      ></li>
     </ul>
   </div>
 </template>
@@ -64,10 +61,10 @@ export default {
     }
   },
   methods: {
-    // chooseSelection (index) {
-    //   this.nowIndex = index
-    //   this.$emit('on-change', this.banks[index])
-    // }
+    chooseSelection (index) {
+      this.nowIndex = index
+      this.$emit('on-change', this.banks[index])
+    }
   }
 }
 </script>
